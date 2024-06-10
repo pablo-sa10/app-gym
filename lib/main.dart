@@ -1,4 +1,5 @@
 import 'package:fitness/pages/home.dart';
+import 'package:fitness/pages/treino_form.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,13 +15,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Fitness',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      theme: ThemeData.dark(
         useMaterial3: true,
       ),
       initialRoute: "/",
       routes: {
         "/": (context) => const Home(),
+        "/Treino_Form": (context) => const TreinoForm(),
       },
     );
   }
