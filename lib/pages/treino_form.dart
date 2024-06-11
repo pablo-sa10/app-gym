@@ -40,9 +40,13 @@ class _TreinoFormState extends State<TreinoForm> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Coloque um nome ao seu novo treino",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 15.0),
+                    child: Text(
+                      "Coloque um nome ao seu novo treino",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                   )
                 ],
               ),
@@ -191,7 +195,7 @@ class _TreinoFormState extends State<TreinoForm> {
                       alignment: Alignment.centerRight,
                       child: const Icon(
                         Icons.delete,
-                        size: 100,
+                        size: 70,
                       ),
                     ),
                     onDismissed: (DismissDirection direction) {

@@ -31,7 +31,7 @@ class _ListExercisesState extends State<ListExercises> {
             alignment: Alignment.centerRight,
             child: const Icon(
               Icons.delete,
-              size: 100,
+              size: 70,
             ),
           ),
           child: Card(

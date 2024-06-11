@@ -32,7 +32,7 @@ class DbService {
 
   String get _treino => '''
     CREATE TABLE treino (
-      id INTERGER PRIMARY KEY AUTOINCREMENT,
+      id TEXT,
       nome TEXT,
       imagem TEXT
     );
@@ -40,8 +40,8 @@ class DbService {
 
   String get _exercicio => '''
     CREATE TABLE exercicio (
-      id INTERGER PRIMARY KEY AUTOINCREMENT,
-      treino_id INTERGER,
+      id TEXT,
+      treino_id TEXT,
       nome TEXT,
       series TEXT,
       repeticoes TEXT
