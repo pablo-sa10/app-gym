@@ -26,8 +26,9 @@ class _ListExercisesState extends State<ListExercises> {
             return result;
           },
           background: Container(
+            margin: EdgeInsets.only(right: 15),
             color: Colors.red,
-            alignment: Alignment.center,
+            alignment: Alignment.centerRight,
             child: const Icon(
               Icons.delete,
               size: 100,

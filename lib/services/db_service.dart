@@ -43,8 +43,8 @@ class DbService {
       id INTERGER PRIMARY KEY AUTOINCREMENT,
       treino_id INTERGER,
       nome TEXT,
-      series INTERGER,
-      repeticoes INTERGER
+      series TEXT,
+      repeticoes TEXT
     );
   ''';
 }
