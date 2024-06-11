@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class TreinoForm extends StatefulWidget {
   const TreinoForm({super.key});
@@ -12,17 +13,17 @@ class _TreinoFormState extends State<TreinoForm> {
   final _formKey = GlobalKey<FormState>();
   final _formKeyExercise = GlobalKey<FormState>();
 
+  //ID UNICO PARA O EXERCICIO
+  final Uuid _uuid = Uuid();
+
   //TEXTOS QUE O USUARIO VAI PREENCHER
   final TextEditingController _nomeTreino = TextEditingController();
   TextEditingController _nomeExercicio = TextEditingController();
   String? _series = "4";
   String? _repeticoes = "8-12";
 
-  //LISTA DE WIDGETS LISTTILE COM OS EXERCICOS ADICIONADOS PELO USUARIO
-  List<Widget> _listTile = [];
-
   //LISTA MAPEANDO OS VALORES ADICIONADOS PELO USUARIO
-  List<Map<String, String>> _listaExercicios = [];
+  List<Map<String, dynamic>> _listaExercicios = [];
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +180,66 @@ class _TreinoFormState extends State<TreinoForm> {
                 ],
               ),
               const SizedBox(height: 20),
-              Column(children: _listTile),
+              Column(
+                children: _listaExercicios.map((exercise) {
+                  return Dismissible(
+                    key: Key(exercise['id']),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      margin: EdgeInsets.only(right: 15),
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      child: const Icon(
+                        Icons.delete,
+                        size: 100,
+                      ),
+                    ),
+                    onDismissed: (DismissDirection direction) {
+                      _removeItem(exercise["id"]);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.indigo,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              exercise["exercicio"],
+                              style: const TextStyle(fontSize: 17),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Séries: ${exercise["series"]}",
+                                    style: const TextStyle(fontSize: 17),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    "Repetições: ${exercise["repeticoes"]}",
+                                    style: const TextStyle(fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 40.0),
                 child: ElevatedButton(
@@ -205,68 +265,22 @@ class _TreinoFormState extends State<TreinoForm> {
 
   void _addItem() {
     setState(() {
-      _listTile.add(
-        Dismissible(
-          key: UniqueKey(),
-          direction: DismissDirection.endToStart,
-          background: Container(
-            margin: EdgeInsets.only(right: 15),
-            color: Colors.red,
-            alignment: Alignment.centerRight,
-            child: const Icon(
-              Icons.delete,
-              size: 100,
-            ),
-          ),
-          onDismissed: (DismissDirection direction) {
-            setState(() {});
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.indigo, borderRadius: BorderRadius.circular(20)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _nomeExercicio.text,
-                    style: const TextStyle(fontSize: 17),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Séries: $_series",
-                          style: const TextStyle(fontSize: 17),
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          "Repetições: $_repeticoes",
-                          style: const TextStyle(fontSize: 17),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
       _listaExercicios.add({
+        "id": _uuid.v4(),
         "exercicio": _nomeExercicio.text,
         "series": "$_series",
         "repeticoes": "$_repeticoes"
       });
+      _nomeExercicio.clear();
+      _series = "4";
+      _repeticoes = "8-12";
       print(_listaExercicios);
+    });
+  }
+
+  _removeItem(String id) {
+    setState(() {
+      _listaExercicios.removeWhere((item) => item['id'] == id);
     });
   }
 }
