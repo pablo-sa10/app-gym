@@ -1,6 +1,6 @@
 import 'package:fitness/services/db_service.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+//import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 class Treino extends ChangeNotifier {

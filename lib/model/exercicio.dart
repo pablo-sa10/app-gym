@@ -1,9 +1,11 @@
+import 'package:fitness/services/db_service.dart';
+
 class Exercicio {
-  int id;
-  int treinoId;
+  String id;
+  String treinoId;
   String nome;
   int series;
-  int repeticoes;
+  String repeticoes;
 
   Exercicio({
     required this.id,
@@ -12,6 +14,16 @@ class Exercicio {
     required this.series,
     required this.repeticoes,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'treinoId': treinoId,
+      'nome': nome,
+      'series': series,
+      'repeticoes': repeticoes
+    };
+  }
 
   factory Exercicio.fromMap(Map<String, dynamic> map) {
     return Exercicio(
@@ -23,10 +35,8 @@ class Exercicio {
     );
   }
 
-  Map<String, dynamic> toMap(){
-    return{
-
-    };
+  Future<int> insert() async{
+    final db = await DbService.instance.database;
+    return await db.insert('exercicio', toMap());
   }
-
 }

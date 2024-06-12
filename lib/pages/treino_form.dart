@@ -66,6 +66,12 @@ class _TreinoFormState extends State<TreinoForm> {
                 },
               ),
               const SizedBox(height: 30),
+              Row(
+                children: [
+                  Text("Adicione uma imagem"),
+                ],
+              )
+              const SizedBox(height: 30),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
