@@ -295,7 +295,7 @@ class _TreinoFormState extends State<TreinoForm> {
 
                       //Salva o Treino no banco
                       _addTreino();
-                      _addExercicios();
+                      //_addExercicios();
                       //Salva os Exercicios no banco
 
                       ScaffoldMessenger.of(context).showSnackBar(
