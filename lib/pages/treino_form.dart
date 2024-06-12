@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:fitness/controller/treino_controller.dart';
 
 class TreinoForm extends StatefulWidget {
   const TreinoForm({super.key});
@@ -9,21 +10,33 @@ class TreinoForm extends StatefulWidget {
 }
 
 class _TreinoFormState extends State<TreinoForm> {
+  final Treinocontroller treinocontroller = Treinocontroller();
+  String _imagemSelecionada = 'assets/images/img1.png';
+
+  //Lista de imagens em assets
+  final List<String> _image = [
+    'assets/images/img1.png',
+    'assets/images/img2.png',
+    'assets/images/img3.png',
+    'assets/images/img4.png',
+    'assets/images/img5.png'
+  ];
+
   //CHAVES PARA VALIDAÇÃO DE FORM
   final _formKey = GlobalKey<FormState>();
   final _formKeyExercise = GlobalKey<FormState>();
 
   //ID UNICO PARA O EXERCICIO
-  final Uuid _uuid = Uuid();
+  final Uuid _uuid = const Uuid();
 
   //TEXTOS QUE O USUARIO VAI PREENCHER
   final TextEditingController _nomeTreino = TextEditingController();
-  TextEditingController _nomeExercicio = TextEditingController();
+  final TextEditingController _nomeExercicio = TextEditingController();
   String? _series = "4";
   String? _repeticoes = "8-12";
 
   //LISTA MAPEANDO OS VALORES ADICIONADOS PELO USUARIO
-  List<Map<String, dynamic>> _listaExercicios = [];
+  final List<Map<String, dynamic>> _listaExercicios = [];
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +79,31 @@ class _TreinoFormState extends State<TreinoForm> {
                 },
               ),
               const SizedBox(height: 30),
-              Row(
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Adicione uma imagem"),
+                  Text(
+                    "Adicione uma imagem",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ],
-              )
+              ),
+              const SizedBox(height: 30),
+              Column(
+                children: [
+                  Image.asset(_imagemSelecionada),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      _addImagem();
+                    },
+                    child: Icon(Icons.camera_alt_outlined),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.indigo
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 30),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +229,7 @@ class _TreinoFormState extends State<TreinoForm> {
                     key: Key(exercise['id']),
                     direction: DismissDirection.endToStart,
                     background: Container(
-                      margin: EdgeInsets.only(right: 15),
+                      margin: const EdgeInsets.only(right: 15),
                       color: Colors.red,
                       alignment: Alignment.centerRight,
                       child: const Icon(
@@ -259,6 +292,12 @@ class _TreinoFormState extends State<TreinoForm> {
                       textStyle: const TextStyle(fontSize: 20)),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+
+                      //Salva o Treino no banco
+                      _addTreino();
+                      _addExercicios();
+                      //Salva os Exercicios no banco
+
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Salvo com sucesso!")));
                     }
@@ -291,6 +330,38 @@ class _TreinoFormState extends State<TreinoForm> {
   _removeItem(String id) {
     setState(() {
       _listaExercicios.removeWhere((item) => item['id'] == id);
+    });
+  }
+
+  void _addImagem() async{
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text("Escolha uma Imagem"),
+        content: SingleChildScrollView(
+          child: Column(
+            children: _image.map((imagePath){
+              return GestureDetector(
+                onTap: (){
+                  setState(() {
+                      _imagemSelecionada = imagePath;
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: Image.asset(imagePath, height: 100, width: 100),
+              );
+            }).toList()
+          ),
+        ),
+      );
+    });
+  }
+
+  void _addTreino() async {
+    String nome = _nomeTreino.text;
+    String imagem = _imagemSelecionada;
+    await treinocontroller.addTreino(nome, imagem);
+    setState(() {
+      Navigator.of(context).pop();
     });
   }
 }
