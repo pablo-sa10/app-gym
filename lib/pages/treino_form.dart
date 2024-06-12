@@ -92,15 +92,15 @@ class _TreinoFormState extends State<TreinoForm> {
               Column(
                 children: [
                   Image.asset(_imagemSelecionada),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       _addImagem();
                     },
-                    child: Icon(Icons.camera_alt_outlined),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.indigo
                     ),
+                    child: const Icon(Icons.camera_alt_outlined),
                   ),
                 ],
               ),
@@ -336,7 +336,7 @@ class _TreinoFormState extends State<TreinoForm> {
   void _addImagem() async{
     showDialog(context: context, builder: (context){
       return AlertDialog(
-        title: Text("Escolha uma Imagem"),
+        title: const Text("Escolha uma Imagem"),
         content: SingleChildScrollView(
           child: Column(
             children: _image.map((imagePath){
